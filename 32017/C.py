@@ -1,3 +1,4 @@
+import sys
 import math
 import itertools
 
@@ -48,6 +49,7 @@ class Heap(object):
 
 
 for case_no in xrange(0, input()):
+    print >> sys.stderr, "Case #%s:" % (case_no + 1,)
     print "Case #%s:" % (case_no + 1,),
 
     K = input()
