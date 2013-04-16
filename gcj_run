@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+set -u
+set -o pipefail
+
+if [ "$#" -gt "2" ]; then
+    NO="$3"
+else
+    NO="0"
+fi
+
+
+IN=$1-$2-$NO.in
+OUT=$1-$2-$NO.out
+
+if [ ! -e "$IN" ]; then
+    echo "[----] Input doesn't exist $IN"
+    exit
+fi
+
+PYTHON=$HOME/src/pypy-2.0-beta1/bin/pypy
+
+echo "[****] COUNTING..... $1-$2-$NO.in"
+ulimit -s 9000000
+/usr/bin/time -f "%E real" $PYTHON $1.py < $IN > $OUT.dry
+
+if [ -e "$OUT" ]; then
+    echo "[    ] comparing $OUT.dry $OUT"
+    diff $OUT.dry $OUT && echo "<the same>"
+else
+    echo "[    ] output"
+    cat $OUT.dry
+fi

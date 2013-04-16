@@ -1,0 +1,34 @@
+#!/bin/bash
+set -e
+set -u
+set -o pipefail
+
+PYTHON=$HOME/src/pypy-2.0-beta1/bin/pypy
+
+CODE="$1.py"
+
+if [ ! -e "$CODE" ]; then
+    echo "[----] Code doesn't exist $CODE"
+    exit
+fi
+
+for NO in `seq 0 1000`; do
+    if [ ! -e "$1-$2-$NO.in" ]; then
+        break
+    fi
+done
+
+IN=$1-$2-$NO.in
+OUT=$1-$2-$NO.out
+
+
+echo "[****] Downloading $1-$2-$IN.in"
+ulimit -s 9000000
+gcj_download_input.py $1 $2 $NO
+echo "[****] COUNTING....."
+/usr/bin/time -f "%E real" $PYTHON $CODE < $IN > $OUT
+echo "[****] Uploading $OUT"
+gcj_submit_solution.py -a $CODE $1 $2 $NO
+
+
+
