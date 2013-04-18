@@ -12,35 +12,26 @@ Store = collections.namedtuple("Store", ["no", "x", "y", "has", "itemnames"])
 def dist(a, b):
     return math.sqrt((a.x - b.x)**2 + (a.y - b.y)**2)
 
-def count_cost((p,d)):
-    if p is None:
-        return Ellipsis
-    return p + d*price_of_gas
-
-def count_add((p,d), (a, b)):
-    return (p+a, d+b)
-
 def solve(a, b, cost, shopping, unvisited_stores, to_buy):
     # Visit b and buy to_buy
     unvisited_stores = unvisited_stores - set((b,))
     shopping = shopping - to_buy
-    cost = count_add(cost,
-                     (sum(stores[b].has[item] for item in to_buy), distances[a][b]))
+    cost += sum(stores[b].has[item] for item in to_buy) + distances[a][b]
     if to_buy & perishable:
-        cost = count_add(cost, (0, distances[b][0]))
+        cost += distances[b][0]
         b = 0
 
     if not shopping:
-        return count_add(cost, (0, distances[b][0]))
+        return cost + distances[b][0]
 
-    rets = [(None, None)]
+    rets = [Ellipsis]
     for c in unvisited_stores:
         to_buy = shopping & stores[c].itemnames
         if not to_buy:
             continue
         for tb in all_combinations(list(to_buy)):
             rets.append( solve(b, c, cost, shopping, unvisited_stores, set(tb)) )
-    return min(rets, key=lambda c:count_cost(c))
+    return min(rets)
 
 
 for case_no in xrange(0, input()):
@@ -73,6 +64,6 @@ for case_no in xrange(0, input()):
     for a in range(len(stores)):
         for b in range(a, len(stores)):
             distances[a][b] = distances[b][a] = \
-                dist(stores[a], stores[b])
-    c = solve(0, 0, (0,0), shopping, frozenset(range(1, len(stores))), set())
-    print '%.7f' % (count_cost(c),)
+                dist(stores[a], stores[b]) * price_of_gas
+    c = solve(0, 0, 0.0, shopping, frozenset(range(1, len(stores))), set())
+    print '%.7f' % (c,)
