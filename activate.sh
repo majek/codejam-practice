@@ -10,4 +10,3 @@ echo ""
 echo "[ ] Docs: less $HOME/src/codejam-commandline-1.2-beta1/README"
 export PS1="(codejam) $PS1"
 export PATH="$HOME/codejam:$HOME/src/codejam-commandline-1.2-beta1:$PATH"
-

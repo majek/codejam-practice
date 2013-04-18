@@ -7,6 +7,12 @@ if [ "$#" -gt "2" ]; then
     NO="$3"
 else
     NO="0"
+    for X in `seq 0 1000`; do
+        if [ ! -e "$1-$2-$X.in" ]; then
+            break
+        fi
+        NO="$X"
+    done
 fi
 
 
