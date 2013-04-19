@@ -32,7 +32,7 @@ ulimit -s 9000000
 
 if [ -e "$OUT" ]; then
     echo "[    ] comparing $OUT.dry $OUT"
-    diff $OUT.dry $OUT && echo "<the same>"
+    diff $OUT $OUT.dry && echo "<the same>"
 else
     echo "[    ] output"
     cat $OUT.dry
