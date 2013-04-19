@@ -1,7 +1,4 @@
-import collections
-import itertools
 import sys
-import math
 
 
 def solve((ta, na), (tb, nb), a, b):
@@ -41,4 +38,3 @@ for case_no in xrange(1, input() + 1):
 
     mem = {}
     print solve(A[0], B[0], 0, 0)
-
