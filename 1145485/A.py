@@ -2,6 +2,7 @@ import collections
 import itertools
 import sys
 import math
+import fractions
 
 
 for case_no in xrange(1, input() + 1):
@@ -20,10 +21,7 @@ for case_no in xrange(1, input() + 1):
     elif Pg == 0 and Pd == 0:
         r = True
     else:
-        r = False
-        for d in xrange(1, min(100, N)+1):
-            x = (d * Pd) / 100.
-            if int(x) == x:
-                r = True
-                break
+        x = 100 / fractions.gcd(Pd, 100)
+        r = x <= N
     print "Possible" if r else "Broken"
+
