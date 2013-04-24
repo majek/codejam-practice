@@ -1,7 +1,4 @@
-import collections
-import itertools
 import sys
-import math
 
 
 for case_no in xrange(1, input() + 1):
