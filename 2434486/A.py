@@ -1,7 +1,4 @@
-import collections
-import itertools
 import sys
-import math
 
 
 def solve(A, idx):
