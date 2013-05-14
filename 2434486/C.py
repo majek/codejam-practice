@@ -1,3 +1,7 @@
+#
+# This code is enough for small data set, but it's way too slow for
+# the large one.
+#
 import sys
 import os.path
 import cPickle as pickle
