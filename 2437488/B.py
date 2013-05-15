@@ -1,6 +1,7 @@
 import sys
 import itertools
 
+
 for case_no in xrange(1, input() + 1):
     print >> sys.stderr, "Case #%s:" % (case_no,)
     print "Case #%s:" % (case_no,),
@@ -34,22 +35,6 @@ for case_no in xrange(1, input() + 1):
         if x == 0 and y == 0:
             break
         seq_item += 1
-    path.reverse()
 
-    xx = 0; yy = 0; s = 1
-    for c in path:
-        if c == 'E':
-            xx += s
-        elif c == 'W':
-            xx -= s
-        elif c == 'N':
-            yy += s
-        elif c == 'S':
-            yy -= s
-        else:
-            assert 0
-        s += 1
-    assert X == xx, (X, xx, path)
-    assert Y == yy, (Y, yy, path)
-    print ''.join(path)
+    print ''.join(reversed(path))
 
