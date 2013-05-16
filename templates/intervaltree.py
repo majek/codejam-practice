@@ -154,8 +154,7 @@ class IntervalTree(object):
         for i in list(self.get(ival)):
             self.delete(i)
             inter = interval_intersect(ival, i)
-            if inter is None:
-                assert False
+            if inter is None: assert False
             for sub in interval_subtract(i, inter):
                 self.add(sub)
         self.add(ival)

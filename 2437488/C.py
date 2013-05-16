@@ -34,8 +34,7 @@ for case_no in xrange(1, input() + 1):
             for i in wall.fill(Interval(w, e, 0)):
                 if i.v < s:
                     here_failed = 1
-                    i = Interval(i.a, i.b, s)
-                updates.update(i)
+                    updates.update(Interval(i.a, i.b, s))
             failed += here_failed
         for _, i in updates.t.items():
             wall.update(Interval(i.a, i.b, i.v))
