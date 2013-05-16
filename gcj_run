@@ -3,6 +3,9 @@ set -e
 set -u
 set -o pipefail
 
+PYTHON=$HOME/src/pypy-2.0-beta1/bin/pypy
+
+
 if [ "$#" -gt "2" ]; then
     NO="$3"
 else
@@ -23,8 +26,6 @@ if [ ! -e "$IN" ]; then
     echo "[----] Input doesn't exist $IN"
     exit
 fi
-
-PYTHON=$HOME/src/pypy-2.0-beta1/bin/pypy
 
 echo "[****] COUNTING..... $1-$2-$NO.in"
 ulimit -s 9000000
