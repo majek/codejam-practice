@@ -6,3 +6,6 @@
 *-large-?.out.dry
 *-tiny-?.out
 *-tiny-?.out.dry
+venv/
+*.pyc
+
