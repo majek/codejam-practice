@@ -3,7 +3,7 @@ import math
 import itertools
 
 
-class Heap(object):
+class TotalHeap(object):
     def __init__(self, init):
         self.N = len(init)
         self.R = int(math.ceil(math.log(self.N, 2)))
@@ -56,7 +56,7 @@ for case_no in xrange(0, input()):
     D = map(int, raw_input().split())[1:]
 
 
-    h = Heap([1 for x in xrange(K)])
+    h = TotalHeap([1 for x in xrange(K)])
     res = [None for x in xrange(K)]
     c = 0
     for i in xrange(K):
