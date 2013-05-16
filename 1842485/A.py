@@ -1,28 +1,5 @@
-import collections
-import itertools
 import sys
-import math
-import bisect
 
-sys.setrecursionlimit(20000)
-
-
-def solve(pos, idx):
-    swing = P[idx] - pos
-
-    if idx in mem:
-        if mem[idx] >= swing: return False
-
-    if P[idx] + swing >= T:
-        return True
-
-    for i in xrange(bisect.bisect_right(P, P[idx] + swing)-1, idx, -1):
-        delta = P[i] - P[idx]
-        if solve(P[i] - min(delta, S[i]), i):
-            return True
-
-    mem[idx] = swing
-    return False
 
 for case_no in xrange(1, input() + 1):
     print >> sys.stderr, "Case #%s:" % (case_no,)
@@ -37,6 +14,22 @@ for case_no in xrange(1, input() + 1):
         S.append(s)
     T = input()
 
-    mem = {}
-    print 'YES' if solve(0, 0) else 'NO'
+    M = [Ellipsis] * N
+    for i in xrange(N):
+        dist = T - P[i]
+        if dist <= S[i]:
+            M[i] = dist
+
+    for i in xrange(N-1, 0-1, -1):
+        min_swing = M[i]
+        if min_swing is Ellipsis: continue
+        for j in xrange(i-1, 0-1, -1):
+            dist = P[i] - P[j]
+            if dist < min_swing:
+                continue
+            if dist > S[j]:
+                continue
+            M[j] = min(M[j], dist)
+
+    print 'YES' if M[0] <= P[0] else 'NO'
 
