@@ -3,6 +3,7 @@ import itertools
 import sys
 import math
 
+from intervaltree import IntervalTree, Interval
 
 
 
@@ -21,23 +22,22 @@ for case_no in xrange(1, input() + 1):
             e += delta_p
             w += delta_p
 
-    wall = collections.defaultdict(lambda:0)
+
+    wall = IntervalTree()
 
     attacks.sort()
-    all_failed = 0
+    failed = 0
     for _, g in itertools.groupby(attacks, key=lambda (d,s,w,e): d):
-        nwall = wall.copy()
-        updates = []
-        for d, s, w, e in g:
-            failed = False
-            for p in xrange(w, e):
-                if wall[p] < s:
-                    nwall[p] = s
-                    failed = True
-            #print "d=%r s=%3s p=%s-%s failed=%r" % (d, s, w, e, failed)
-            if failed:
-                all_failed += 1
-        wall = nwall
-    print [wall[i] for i in xrange(min(wall.keys()), max(wall.keys())+1)]
-    print all_failed
+        updates = IntervalTree()
+        for _, s, w, e in g:
+            here_failed = 0
+            for i in wall.fill(Interval(w, e, 0)):
+                if i.v < s:
+                    here_failed = 1
+                    i = Interval(i.a, i.b, s)
+                updates.update(i)
+            failed += here_failed
+        for _, i in updates.t.items():
+            wall.update(Interval(i.a, i.b, i.v))
+    print failed
 
