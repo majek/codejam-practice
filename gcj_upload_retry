@@ -3,9 +3,6 @@ set -e
 set -u
 set -o pipefail
 
-#PC=proxychains
-PC=""
-
 PYTHON=$HOME/src/pypy-2.0-beta1/bin/pypy
 
 CODE="$1.py"
@@ -15,20 +12,28 @@ if [ ! -e "$CODE" ]; then
     exit
 fi
 
-for NO in `seq 0 1000`; do
-    if [ ! -e "$1-$2-$NO.in" ]; then
+NO=
+for NOTRY in `seq 0 1000`; do
+    if [ ! -e "$1-$2-$NOTRY.in" ]; then
         break
     fi
+    NO="$NOTRY"
 done
 
 IN=$1-$2-$NO.in
 OUT=$1-$2-$NO.out
 
+if [ ! -e "$IN" ]; then
+    echo "[----] Input $IN doesn't exist!"
+    exit
+fi
 
-echo "[****] Downloading $1-$2-$IN.in"
+if [ -e "$OUT" ]; then
+    mv $OUT $OUT.bak
+fi
+
 ulimit -s 9000000
-$PC gcj_download_input.py $1 $2 $NO
 echo "[****] COUNTING....."
 /usr/bin/time -f "%E real" $PYTHON $CODE < $IN > $OUT
 echo "[****] Uploading $OUT"
-$PC gcj_submit_solution.py -a $CODE $1 $2 $NO
+gcj_submit_solution.py -a $CODE $1 $2 $NO
