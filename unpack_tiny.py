@@ -4,7 +4,7 @@ import json
 import urllib
 import string
 import os
-
+import re
 
 url = sys.argv[1]
 
@@ -26,6 +26,10 @@ for name, p in zip(string.uppercase, j['problems']):
 
     inp = code[1].split('</code>')[0].replace('<br/>\r\n', '\n').strip()
     out = code[2].split('</code>')[0].replace('<br/>\r\n', '\n').strip()
+
+    # remove <b/> alike's
+    inp = re.sub('<[^>]>', lambda a:'', inp)
+    out = re.sub('<[^>]>', lambda a:'', out)
 
     with open(INP, 'wb') as fd:
         fd.write(inp + '\n')

@@ -3,4 +3,5 @@
 
 CONTEST=`cat $HOME/src/codejam-commandline-1.2-beta1/config/current_config.py |grep contest_id|cut -d "'" -f 4`
 
+echo "[*] Contest $CONTEST"
 python $HOME/codejam/unpack_tiny.py https://code.google.com/codejam/contest/$CONTEST/dashboard/ContestInfo

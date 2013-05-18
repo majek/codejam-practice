@@ -16,7 +16,7 @@ echo "    gcj_get_status.py"
 echo ""
 echo "[ ] Docs: less $HOME/src/codejam-commandline-1.2-beta1/README"
 export PS1="(codejam) $PS1"
-export PATH="$HOME/codejam:$HOME/src/codejam-commandline-1.2-beta1:$PATH"
+export PATH="$HOME/codejam:$HOME/src/codejam-commandline-1.2-beta1:$HOME/src/pypy/bin/:$PATH"
 
 #echo "[*] Renewing login:"
 #$HOME/src/codejam-commandline-1.2-beta1/gcj_renew_login.py > /dev/null

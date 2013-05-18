@@ -3,8 +3,7 @@ set -e
 set -u
 set -o pipefail
 
-PYTHON=$HOME/src/pypy-2.0-beta1/bin/pypy
-PYTHON=python
+PYTHON=$HOME/src/pypy/bin/pypy
 
 
 CODE="$1.py"
