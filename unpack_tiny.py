@@ -13,6 +13,13 @@ data = f.read()
 
 j = json.loads(data)
 
+def fix(s):
+    # remove <b/> alike's
+    s = re.sub('<[^>]>', lambda a:'', s)
+    # replace &nbsp; with space
+    s = s.replace('&nbsp;', ' ')
+    return s
+
 for name, p in zip(string.uppercase, j['problems']):
     code = p['body'].split('<code>\r\n')
     if len(code) != 3:
@@ -27,9 +34,8 @@ for name, p in zip(string.uppercase, j['problems']):
     inp = code[1].split('</code>')[0].replace('<br/>\r\n', '\n').strip()
     out = code[2].split('</code>')[0].replace('<br/>\r\n', '\n').strip()
 
-    # remove <b/> alike's
-    inp = re.sub('<[^>]>', lambda a:'', inp)
-    out = re.sub('<[^>]>', lambda a:'', out)
+    inp = fix(inp)
+    out = fix(out)
 
     with open(INP, 'wb') as fd:
         fd.write(inp + '\n')

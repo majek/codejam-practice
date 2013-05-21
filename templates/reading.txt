@@ -1,0 +1,5 @@
+ * Statistics for programmers:
+    http://www.evanmiller.org/statistical-formulas-for-programmers.html
+    http://udel.edu/~mcdonald/statintro.html
+    http://gdr.geekhood.net/gdrwpl/metnum.php
+    http://www.gigamonkeys.com/book/practical-a-spam-filter.html

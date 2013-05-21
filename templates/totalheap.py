@@ -1,3 +1,7 @@
+import math
+import itertools
+
+
 class TotalHeap(object):
     def __init__(self, init):
         self.N = len(init)
