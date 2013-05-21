@@ -3,28 +3,12 @@ import itertools
 import collections
 
 
-def get_numbers(X, v):
-    while X[v]:
-        n = X[v]
-        yield n
-        v -= n
-
-
 def solve(S):
-    all_sum = sum(S)
-    X = [None] * (all_sum + 1)
-    X[0] = 0
+    X = {}
 
-    for s in S:
-        for i in xrange(len(X)-1, 0-1, -1):
-            if X[i] is None:
-                continue
-            if X[i+s] is None:
-                X[i+s] = s
-            else:
-                return (list(get_numbers(X, i+s)),
-                        list(get_numbers(X, i)) + [s])
-    return (None, None)
+    r = set()
+    while len(s) < 20:
+        s.add(random.randint(0, len(S)-1))
 
 
 for case_no in xrange(0, input()):
