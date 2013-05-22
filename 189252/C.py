@@ -1,6 +1,4 @@
 import sys
-import random
-import bintrees
 
 
 def solve(a, b):
