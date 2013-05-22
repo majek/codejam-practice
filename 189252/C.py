@@ -1,27 +1,26 @@
 import sys
-import itertools
+import random
+import bintrees
 
 
-def cost(Q):
-    c = 0
-    p = [True] * P
-    for v in Q:
-        p[v] = None
-        for l in xrange(v-1, 0-1, -1):
-            if not p[l]:
-                break
-            c += 1
-        for r in xrange(v+1, P):
-            if not p[r]:
-                break
-            c += 1
-    return c
+def solve(a, b):
+    k = (a,b)
+    if k in mem: return mem[k]
+
+    best = Ellipsis
+    for q in Q:
+        if q >= a and q < b:
+            c = b-a-1 + solve(a, q) + solve(q+1, b)
+            best = min(best, c)
+    r = mem[k] = best if best != Ellipsis else 0
+    return r
 
 for case_no in xrange(1, input() + 1):
     print >> sys.stderr, "Case #%s:" % (case_no,)
     print "Case #%s:" % (case_no,),
 
     P, _ = map(int, raw_input().split())
-    Q = sorted(int(v)-1 for v in raw_input().split())
+    Q = [int(v)-1 for v in raw_input().split()]
 
-    print min(cost(qq) for qq in itertools.permutations(Q))
+    mem = {}
+    print solve(0, P)
