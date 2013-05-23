@@ -1,9 +1,9 @@
 import sys
 
 
-def fall((r, c), air):
+def fall((r, c)):
     f = 0
-    while (r+1, c) in air:
+    while (r+1, c) in Air:
         f += 1
         r += 1
     return f
@@ -14,7 +14,7 @@ def accessible((r, c), air):
     for chain in [xrange(c-1, 0-1, -1), xrange(c+1, C)]:
         for cc in chain:
             if (r, cc) in air:
-                f = fall((r, cc), air)
+                f = fall((r, cc))
                 if f == 0:
                     yield (r, cc)
                     continue
@@ -31,7 +31,7 @@ def can_dig((r, c), air):
 
 
 def solve((r, c), dug):
-    dug = frozenset((rr, cc) for rr, cc in dug if rr in (r, r+1))
+    dug = frozenset(dug)
     k = (r, c, dug)
     if k in mem: return mem[k]
 
@@ -41,15 +41,34 @@ def solve((r, c), dug):
 def _solve(pos, dug):
     air = Air | dug
     acc = list(accessible(pos, air))
-    for (rr, cc) in acc:
-        if rr == R-1:
-            return 0
-    answers = [sys.maxint]
+
+    diggable = set()
     for p2 in acc:
+        if p2[0] == R-1:
+            return 0
         for p3 in can_dig(p2, air):
-            a = 1 + solve(p2, dug | set((p3,)))
-            answers.append( a )
-    return min(answers)
+            diggable.add(p3)
+
+
+    ans = sys.maxint
+    for rr, cc in acc:
+        dug2 = set()
+        f = fall((rr+1, cc+1))
+        if f+1 <= F:
+            for cci in xrange(cc+1, C):
+                if (rr+1, cci) not in diggable:
+                    break
+                dug2.add( (rr+1, cci) )
+                ans = min(ans, len(dug2) + solve((rr+1+f, cc+1), dug2 if f == 0 else set()))
+        dug2 = set()
+        f = fall((rr+1, cc-1))
+        if f+1 <= F:
+            for cci in xrange(cc-1, 0-1, -1):
+                if (rr+1, cci) not in diggable:
+                    break
+                dug2.add( (rr+1, cci) )
+                ans = min(ans, len(dug2) + solve((rr+1+f, cc-1), dug2 if f == 0 else set()))
+    return ans
 
 
 for case_no in xrange(1, input() + 1):
