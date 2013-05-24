@@ -13,7 +13,7 @@ def _fun(l, n):
 
     ch = n - l - 1
     return sum(fun(ll, l) * binominal(ch, l - ll - 1)
-               for ll in xrange(1, l)) % 100003
+               for ll in xrange(max(1, l-ch-1), l)) % 100003
 
 mem = {}
 def fun(l, n):
