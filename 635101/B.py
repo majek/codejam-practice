@@ -1,5 +1,6 @@
 import sys
 
+
 for case_no in xrange(1, input() + 1):
     print >> sys.stderr, "Case #%s:" % (case_no,)
     print "Case #%s:" % (case_no,),
@@ -11,11 +12,11 @@ for case_no in xrange(1, input() + 1):
     C = zip(X, V)
 
     moves = 0
-    while C and K > 0:
+    while C and K:
         x, v = C.pop()
         if x + v * T >= B:
             K -= 1
-            continue
-        moves += K
+        else:
+            moves += K
 
     print moves if K == 0 else "IMPOSSIBLE"
