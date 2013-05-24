@@ -15,9 +15,10 @@ j = json.loads(data)
 
 def fix(s):
     # remove <b/> alike's
-    s = re.sub('<[^>]>', lambda a:'', s)
+    s = re.sub('<[^>]+>', lambda a:'', s)
     # replace &nbsp; with space
     s = s.replace('&nbsp;', ' ')
+    s = s.replace('\r', '')
     return s
 
 for name, p in zip(string.uppercase, j['problems']):
