@@ -10,18 +10,16 @@ for case_no in xrange(1, input() + 1):
     l = map(int, raw_input().split())
     P, C, S = l[0], l[1], l[2:]
 
-
     S.sort()
 
-    c = 0
+    # Following mr Ralph
     while True:
-        S, R = S[:-C],  [v - 1 for v in S[-C:]]
-        if min(R) < 0:
+        mean = sum(S) / C
+        greater_than_mean = [i for i in xrange(P) if S[i] > mean]
+        if not greater_than_mean:
             break
-        c += 1
-        for v in R:
-            idx = bisect.bisect_left(S, v)
-            S.insert(idx, v)
+        for j in greater_than_mean:
+            S[j] = mean
 
-    print c
+    print mean
 
