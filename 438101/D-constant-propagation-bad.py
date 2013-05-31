@@ -67,15 +67,18 @@ def propagate(F, i):
     return F
 
 def solve(F, s=0):
-    '''
     while None in F:
-        for i in xrange(N):
+        for i in xrange(s, N):
             if F[i] is not None:
                 continue
             F[i] = True
             Ft = propagate(F[:], i)
+            if Ft:
+                Ft = solve(Ft, i+1)
             F[i] = False
             Ff = propagate(F[:], i)
+            if Ff:
+                Ff = solve(Ff, i+1)
             F[i] = None
 
             yes = False
@@ -86,10 +89,14 @@ def solve(F, s=0):
                         if F[j] is None:
                             F[j] = a
                             F = propagate(F[:], j)
+                            if not F:
+                                return None
                             assert F is not None
                             yes = True
+                            return solve(F)
                         assert F[j] == a
-                        assert propagate(F[:], j) is not None
+                        if propagate(F[:], j) is None:
+                            return None
                 if yes:
                     break
             elif Ft or Ff:
@@ -97,10 +104,12 @@ def solve(F, s=0):
                 F[i] = f[i]
                 F = propagate(F, i)
                 assert F is not None
+                return solve(F)
                 break
         else:
             # Not changed anything
             break
+
     '''
     if None in F:
         for i in xrange(s, N):
@@ -126,6 +135,7 @@ def solve(F, s=0):
                 F[i] = bool(Ft)
                 F = propagate(F[:], i)
                 return solve(F, i+1)
+    '''
     return F
 
 
