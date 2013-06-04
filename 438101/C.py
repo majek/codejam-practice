@@ -10,8 +10,6 @@ for case_no in xrange(1, input() + 1):
     l = map(int, raw_input().split())
     P, C, S = l[0], l[1], l[2:]
 
-    S.sort()
-
     # Following mr Ralph
     while True:
         mean = sum(S) / C
