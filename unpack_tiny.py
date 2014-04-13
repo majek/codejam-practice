@@ -11,6 +11,7 @@ url = sys.argv[1]
 f = urllib.urlopen(url)
 data = f.read()
 
+print repr(url)
 j = json.loads(data)
 
 def fix(s):
@@ -22,7 +23,7 @@ def fix(s):
     return s
 
 for name, p in zip(string.uppercase, j['problems']):
-    code = p['body'].split('<code>\r\n')
+    code = p['body'].split('<pre class="io-content">')
     if len(code) != 3:
         print "[.] %s: Can't parse problem" % (name,)
         continue
@@ -32,8 +33,8 @@ for name, p in zip(string.uppercase, j['problems']):
         print "[.] %s: Won't overwrite files %r %r" % (name, INP, OUT)
         continue
 
-    inp = code[1].split('</code>')[0].replace('<br/>\r\n', '\n').strip()
-    out = code[2].split('</code>')[0].replace('<br/>\r\n', '\n').strip()
+    inp = code[1].split('</pre>')[0].replace('<br/>\r\n', '\n').strip()
+    out = code[2].split('</pre>')[0].replace('<br/>\r\n', '\n').strip()
 
     inp = fix(inp)
     out = fix(out)

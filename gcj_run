@@ -4,6 +4,7 @@ set -u
 set -o pipefail
 
 PYTHON=$HOME/src/pypy/bin/pypy
+PYTHON=`which python`
 
 
 if [ "$#" -gt "2" ]; then
