@@ -3,47 +3,7 @@ import sys
 import math
 
 
-
-def dim_ternarysearch_min(l, r, fun, depth=1024):
-    if depth == 0:
-        return r
-    dim = len(l)
-    lt = [(2.*l[i] + r[i]) / 3. for i in xrange(dim)]
-    rt = [(l[i] + 2.*r[i]) / 3. for i in xrange(dim)]
-
-    if r == rt  or l == lt:
-        return l
-
-    lts = [None] * dim
-    rts = [None] * dim
-    for d in xrange(dim):
-        a = l[:]
-        a[d] = lt[d]
-        lts[d] = fun(*a)
-
-        b = r[:]
-        b[d] = rt[d]
-        rts[d] = fun(*b)
-
-    mc = min(lts + rts)
-    for d in xrange(dim):
-        #print >> sys.stderr, d
-        if lts[d] != mc and rts[d] != mc:
-            continue
-        if lts[d] > rts[d]:
-            #a = l[:]
-            #a[d] = lt[d]
-            return dim_ternarysearch_min(a, r, fun, depth-1)
-        else:
-            #b = r[:]
-            #b[d] = rt[d]
-            return dim_ternarysearch_min(l, b, fun, depth-1)
-
-
-
-
 dist = lambda x1, y1, x2, y2: math.sqrt((x1-x2)**2 + (y1-y2)**2)
-
 
 for case_no in xrange(1, input() + 1):
     print >> sys.stderr, "Case #%s:" % (case_no,)
