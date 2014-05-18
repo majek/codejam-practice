@@ -17,10 +17,7 @@ for case_no in xrange(1, input() + 1):
                 for j in xrange(i+1, N):
                     if A[j] <= i:
                         break
-                else:
-                    assert False
                 r = A.pop(j)
-                assert r <= i
                 A.insert(i, r)
                 c += j-i
                 break
