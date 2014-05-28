@@ -1,5 +1,47 @@
 import sys
 import collections
+import itertools
+
+
+def bipartite(G):
+    A = set(G.keys())
+    B = set(itertools.chain(*G.values()))
+    assert not set(A) & set(B)
+    assert None not in G and Ellipsis not in G
+
+    G[None] = A
+    for k in B:
+        G[k].add(Ellipsis)
+
+    def find_path(G):
+        level = [None]
+        prev = {}
+        while level and Ellipsis not in prev:
+            newlevel = []
+            for node in level:
+                for child in G[node]:
+                    if child in prev:
+                        continue
+                    prev[child] = node
+                    newlevel.append( child )
+            level = newlevel
+
+        if Ellipsis not in prev:
+            return False
+
+        e = Ellipsis
+        while e is not None:
+            p = prev[e]
+            G[p].remove(e)
+            if not G[p]:
+                del G[p]
+            G[e].add(p)
+            e = p
+        return True
+
+    while find_path(G):
+        pass
+    return [(list(G[b])[0], b) for b in G[Ellipsis]]
 
 
 for case_no in xrange(1, input() + 1):
@@ -19,47 +61,12 @@ for case_no in xrange(1, input() + 1):
             if c > 0: yield r + 1, c - 1
             if c < N-1: yield r + 1, c + 1
 
-    G = collections.defaultdict(lambda:collections.defaultdict(lambda:0))
-    for r in xrange(M):
-        for c in xrange(N):
-            for a, b in neigh(r, c):
-                if broken[r][c] == 'x' or broken[a][b] == 'x':
-                    continue
-                if c % 2 == 1:
-                    G[(None,None)][(r,c)] = 1
-                    G[(r,c)][(a,b)] = 1
-                else:
-                    G[(r,c)][(Ellipsis,Ellipsis)] = 1
+    G = collections.defaultdict(set)
+    for r, c in ((r, c) for r in xrange(M) for c in xrange(N)):
+        for a, b in neigh(r, c):
+            if broken[r][c] == 'x' or broken[a][b] == 'x':
+                continue
+            if c % 2 == 1:
+                G[(r,c)].add( (a,b) )
 
-    def find_path(G, s, e):
-        level = [(s)]
-        prev = {s:None}
-        while level and e not in prev:
-            newlevel = set()
-            for node in level:
-                for child, v in G[node].iteritems():
-                    if child in prev: continue
-                    assert v > 0
-                    prev[child] = node
-                    newlevel.add( child )
-            level = newlevel
-        if e not in prev:
-            return None
-
-        while prev[e]:
-            p = prev[e]
-            assert G[p][e] > 0
-            v = G[p][e]
-            if v != 1:
-                G[p][e] -= 1
-            else:
-                del G[p][e]
-            G[e][p] += 1
-            e = p
-        return True
-
-    s, e = (None, None), (Ellipsis, Ellipsis)
-    while find_path(G, s, e):
-        pass
-
-    print M*N - sum(sum(1 for c in r if c == 'x') for r in broken) - len(G[(Ellipsis, Ellipsis)])
+    print M*N - sum(sum(c == 'x' for c in r) for r in broken) - len(bipartite(G))
