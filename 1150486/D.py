@@ -1,43 +1,68 @@
 import sys
-import collections
-import itertools
 
+
+def solve((b, c)):
+    # print b,c, W[b], W[c], D[b], D[c]
+    p = []
+    for a in W[b] & rev_d[D[b]-1]:
+        gkey = (a, b, c); fkey = (a, b)
+        if fkey not in F:
+            solve(fkey)
+        p.append( F[fkey] + G[gkey] )
+    F[(b, c)] = max(p)
 
 for case_no in xrange(1, input() + 1):
     print >> sys.stderr, "Case #%s:" % (case_no,)
     print "Case #%s:" % (case_no,),
 
     P, _ = map(int, raw_input().split())
-    G = collections.defaultdict(set)
+
+    W = [set() for _ in xrange(P)]
     for pair in raw_input().split():
-        x, y = map(int, pair.split(","))
-        G[x].add(y)
-        G[y].add(x)
+        a, b = map(int, pair.split(","))
+        W[a].add( b )
+        W[b].add( a )
 
-    level = set([0])
-    prev = collections.defaultdict(list)
+    # 1. Distances
+    D = [Ellipsis] * P
     done = set()
-    while 1 not in level:
-        new_level = []
+    level = set((0,))
+    d = 0
+    while level and 1 not in done:
+        nlevel = set()
         for p in level:
-            for t in G[p] - done:
-                prev[t].append(p)
-                new_level.append(t)
-        done |= set(new_level)
-        level = set(new_level)
+            D[p] = d
+            nlevel |= W[p]
+        done |= level
+        level = nlevel - done
+        d += 1
 
-    e = 1
-    depth = 0
-    while e != 0:
-        depth += 1
-        e = prev[e][0]
+    # 2. Index of distances
+    rev_d = [set() for _ in xrange(d)]
+    for p, d in enumerate(D):
+        if d is not Ellipsis:
+            rev_d[d].add( p )
 
-    def solve(p, threats):
-        threats = G[p] | threats
-        if p == 0:
-            return len(threats)
-        return max(solve(t, threats) for t in prev[p])
+    G = {}
+    for d in xrange(len(rev_d)-2):
+        for a in rev_d[d]:
+            for b in W[a] & rev_d[d+1]:
+                for c in W[b] & rev_d[d+2]:
+                    G[(a, b, c)] = len(W[c] - W[a] - W[b])
 
+    F = {}
+    for p in rev_d[1]:
+        F[(0, p)] = len(W[p] | W[0])
 
-    r = max(solve(p, set((0,))) for p in prev[1])
-    print depth-1, r - 1-(depth-1)
+    if 1 in W[0]:
+        print 0, len(W[0])
+    else:
+        prev = []
+        for a in rev_d[D[1]-2]:
+            for b in W[a] & rev_d[D[1]-1]:
+                if 1 not in W[b]:
+                    continue
+                if (a, b) not in F:
+                    solve((a, b))
+                prev.append( F[(a, b)] )
+        print D[1] - 1, max(prev) - D[1]
